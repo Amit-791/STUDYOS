@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STUDYOS - Intelligent Academic Planning System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>STUDYOS</h1>
+      <p>Intelligent Academic Planning System</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p id="message" class="message" role="status" aria-live="polite" hidden></p>
+
+    <div class="layout">
+      <aside>
+        <form id="task-form" class="card">
+          <h2>Add task</h2>
+          <label>Type
+            <select name="type">
+              <option value="ASSIGNMENT">Assignment</option>
+              <option value="QUIZ">Quiz</option>
+              <option value="EXAM">Exam</option>
+              <option value="PROJECT">Project</option>
+              <option value="LAB">Lab</option>
+              <option value="PERSONAL">Personal</option>
+            </select>
+          </label>
+          <label>Title <input name="title" required maxlength="80"></label>
+          <label>Subject <input name="subject" required maxlength="40"></label>
+          <div class="row">
+            <label>Deadline (days) <input name="deadline" type="number" step="1" value="3" required></label>
+            <label>Workload (hours) <input name="workload" type="number" step="1" min="0" value="2" required></label>
+          </div>
+          <label>Priority (1 low, 5 high) <input name="priority" type="number" step="1" min="1" max="5" value="3" required></label>
+          <button type="submit">Add task</button>
+        </form>
+
+        <form id="dep-form" class="card">
+          <h2>Add dependency</h2>
+          <label>Do this first <select name="prerequisite" required></select></label>
+          <label>Before this <select name="dependent" required></select></label>
+          <button type="submit">Add dependency</button>
+        </form>
+
+        <div class="card">
+          <h2>Data</h2>
+          <p class="hint">Saved automatically in this browser.</p>
+          <div class="row">
+            <button type="button" id="sample-btn" class="secondary">Load sample</button>
+            <button type="button" id="clear-btn" class="danger">Clear all</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="content">
+        <nav class="tabs" aria-label="Views">
+          <button type="button" data-tab="tasks" class="active">Tasks</button>
+          <button type="button" data-tab="plan">Today's plan</button>
+          <button type="button" data-tab="urgent">Urgent</button>
+          <button type="button" data-tab="order">Order</button>
+          <button type="button" data-tab="delay">What-if delay</button>
+          <button type="button" data-tab="risk">Risk report</button>
+        </nav>
+
+        <div id="tab-tasks" class="card panel">
+          <div class="panel-head">
+            <h2>All tasks</h2>
+            <label class="inline">Sort by
+              <select id="sort-by">
+                <option value="id">ID</option>
+                <option value="deadline">Deadline</option>
+                <option value="priority">Priority</option>
+                <option value="workload">Workload</option>
+                <option value="risk">Risk</option>
+              </select>
+            </label>
+          </div>
+          <div id="tasks-out"></div>
+        </div>
+
+        <div id="tab-plan" class="card panel" hidden>
+          <div class="panel-head">
+            <h2>Today's study plan</h2>
+            <label class="inline">Available hours <input id="hours" type="number" min="0" step="1" value="6"></label>
+          </div>
+          <p class="hint">Greedy scheduling: highest risk per hour first. Blocked tasks are left out.</p>
+          <div id="plan-out"></div>
+        </div>
+
+        <div id="tab-urgent" class="card panel" hidden>
+          <div class="panel-head">
+            <h2>Top urgent tasks</h2>
+            <label class="inline">Show <input id="top-k" type="number" min="1" step="1" value="5"></label>
+          </div>
+          <div id="urgent-out"></div>
+        </div>
+
+        <div id="tab-order" class="card panel" hidden>
+          <h2>Valid execution order</h2>
+          <p class="hint">Topological sort of the dependency graph.</p>
+          <div id="order-out"></div>
+          <h3>Dependencies</h3>
+          <div id="deps-out"></div>
+        </div>
+
+        <div id="tab-delay" class="card panel" hidden>
+          <h2>What-if delay simulator</h2>
+          <p class="hint">Shows what a delay would affect. Your saved tasks do not change.</p>
+          <div class="row">
+            <label>Task <select id="delay-task"></select></label>
+            <label>Delay (days) <input id="delay-days" type="number" min="0" step="1" value="2"></label>
+          </div>
+          <div id="delay-out"></div>
+        </div>
+
+        <div id="tab-risk" class="card panel" hidden>
+          <h2>Risk analysis report</h2>
+          <p class="hint">Pending tasks, highest risk first.</p>
+          <div id="risk-out"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <noscript><p class="wrap">Please turn on JavaScript to use STUDYOS.</p></noscript>
+  <script src="script.js"></script>
+</body>
+</html>
